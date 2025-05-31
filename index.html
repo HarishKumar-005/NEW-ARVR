@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday AR 🎂</title>
+
+  <!-- A-Frame library -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <!-- AR.js library -->
+  <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0; padding: 0; overflow: hidden; height: 100%; background: #f7e6ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    #message {
+      position: fixed;
+      bottom: 30px;
+      width: 100%;
+      text-align: center;
+      font-size: 1.6rem;
+      color: #6a0dad;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 1s ease;
+      user-select: none;
+      pointer-events: none;
+      text-shadow: 0 0 5px #b57aff;
+    }
+    #message.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .instructions {
+      position: fixed;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 1rem;
+      color: #9a4d9a;
+      user-select: none;
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 0 0 10px 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="instructions">
+    Point your camera at the <strong>hiro marker</strong> below and tap the cake to light candles! 🎂✨
+  </div>
+  <div id="message">Happy Birthday! 🎉 Wishing you a wonderful day filled with joy and surprises! 🥳</div>
+
+  <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false;' vr-mode-ui="enabled: false">
+    <!-- Marker to detect -->
+    <a-marker preset="hiro">
+      <!-- Birthday cake base -->
+      <a-cylinder position="0 0.15 0" radius="0.7" height="0.3" color="#d18aff" shadow></a-cylinder>
+
+      <!-- Cake top layer -->
+      <a-cylinder position="0 0.5 0" radius="0.5" height="0.3" color="#fff0f6" shadow></a-cylinder>
+
+      <!-- Candles (3) -->
+      <a-cylinder id="candle1" position="-0.25 0.8 0" radius="0.05" height="0.3" color="#ff6f91" visible="false"></a-cylinder>
+      <a-cylinder id="candle2" position="0 0.8 0" radius="0.05" height="0.3" color="#ff9671" visible="false"></a-cylinder>
+      <a-cylinder id="candle3" position="0.25 0.8 0" radius="0.05" height="0.3" color="#ffc75f" visible="false"></a-cylinder>
+
+      <!-- Candle flames -->
+      <a-sphere id="flame1" position="-0.25 1.0 0" radius="0.07" color="#fff176" visible="false" material="shader: flat; opacity: 0.8;"></a-sphere>
+      <a-sphere id="flame2" position="0 1.0 0" radius="0.07" color="#fff176" visible="false" material="shader: flat; opacity: 0.8;"></a-sphere>
+      <a-sphere id="flame3" position="0.25 1.0 0" radius="0.07" color="#fff176" visible="false" material="shader: flat; opacity: 0.8;"></a-sphere>
+
+      <!-- Text label -->
+      <a-text value="Tap the cake!" position="0 1.4 0" align="center" color="#6a0dad" width="3"></a-text>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <audio id="music" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_4a92b12b3c.mp3?filename=upbeat-happy-12654.mp3" preload="auto"></audio>
+
+  <script>
+    const cake = document.querySelector('a-cylinder[color="#d18aff"]'); // cake base
+    const candle1 = document.getElementById('candle1');
+    const candle2 = document.getElementById('candle2');
+    const candle3 = document.getElementById('candle3');
+    const flame1 = document.getElementById('flame1');
+    const flame2 = document.getElementById('flame2');
+    const flame3 = document.getElementById('flame3');
+    const message = document.getElementById('message');
+    const music = document.getElementById('music');
+
+    let candlesLit = false;
+
+    // Add touch/click interaction on the cake base
+    cake.addEventListener('click', () => {
+      if (!candlesLit) {
+        candle1.setAttribute('visible', 'true');
+        candle2.setAttribute('visible', 'true');
+        candle3.setAttribute('visible', 'true');
+        flame1.setAttribute('visible', 'true');
+        flame2.setAttribute('visible', 'true');
+        flame3.setAttribute('visible', 'true');
+
+        // Glow effect on flames using animation
+        [flame1, flame2, flame3].forEach(flame => {
+          flame.setAttribute('animation', 'property: scale; from: 1; to: 1.3; dur: 700; dir: alternate; loop: true');
+        });
+
+        // Show birthday message
+        message.classList.add('show');
+
+        // Play music on first interaction
+        music.play();
+
+        candlesLit = true;
+      }
+    });
+  </script>
+</body>
+</html>

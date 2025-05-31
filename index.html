@@ -1,224 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>AR Birthday Wish</title>
-    <!-- Load A-Frame -->
+    <meta charset="UTF-8" />
+    <title>3D Birthday Wish</title>
+    <!-- A-Frame Library -->
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <!-- Load AR.js (A-Frame version) -->
-    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
 
-    <!-- Optional: Import a friendlier web font -->
+    <!-- Google Font for Aesthetic Text -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Inline CSS for basic styling -->
     <style>
+      html,
       body {
         margin: 0;
+        padding: 0;
         overflow: hidden;
-        font-family: 'Poppins', sans-serif;
-      }
-      /* Ensure the canvas takes the full viewport */
-      a-scene {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
+        font-family: 'Poppins', sans-serif;
+        background-color: #faf3f0;
       }
-      /* Hide any overflow from the marker preview */
-      #marker-root {
-        overflow: hidden;
+      a-scene {
+        width: 100vw;
+        height: 100vh;
       }
     </style>
   </head>
 
   <body>
-    <!-- A-Frame scene in “embedded” mode with AR.js -->
-    <a-scene
-      embedded
-      vr-mode-ui="enabled: false"
-      arjs="sourceType: webcam; debugUIEnabled: false;"
-    >
-      <!-- Camera entity (required for AR.js) -->
-      <a-entity camera></a-entity>
+    <!-- A-Frame Scene (No AR, Pure 3D) -->
+    <a-scene>
+      <!-- Camera with Orbit Controls (allows touch drag/rotate and pinch/zoom) -->
+      <a-entity
+        camera
+        position="0 1.5 4"
+        orbit-controls="target: 0 1 0; enablePan: false; enableZoom: true; zoomSpeed: 0.6; rotateSpeed: 0.3; maxDistance: 10; minDistance: 2"
+        look-controls="enabled: false"
+      ></a-entity>
 
-      <!-- Use the “hiro” preset marker; replace with a custom marker if desired -->
-      <a-marker preset="hiro">
-        <!-- Group all 3D objects under one entity so we can position/scale together -->
-        <a-entity id="birthday-scene" position="0 0 0" scale="0.5 0.5 0.5">
-          <!-- 1) Cake Base (a cylinder) -->
-          <a-cylinder
-            id="cake"
-            position="0 0.3 0"
-            radius="0.5"
-            height="0.6"
-            color="#FFC0CB"
-            class="clickable"
-          >
-            <!-- Frosting (a slightly larger torus) -->
-            <a-torus
-              position="0 0.6 0"
-              radius="0.52"
-              radius-tubular="0.1"
-              rotation="90 0 0"
-              color="#FFF0F5"
-            ></a-torus>
-          </a-cylinder>
+      <!-- Lighting -->
+      <a-entity
+        light="type: ambient; color: #ffffff; intensity: 0.5"
+      ></a-entity>
+      <a-entity
+        light="type: directional; color: #ffffff; intensity: 0.8"
+        position="0 5 5"
+      ></a-entity>
 
-          <!-- 2) Candles (small cylinders with flame spheres) -->
-          <!-- Candle #1 -->
-          <a-cylinder
-            position="-0.2 0.9 0"
-            radius="0.05"
-            height="0.3"
-            color="#FFFFFF"
-          ></a-cylinder>
-          <a-sphere
-            position="-0.2 1.05 0"
-            radius="0.05"
-            color="#FFD700"
-          ></a-sphere>
+      <!-- Ground Plane -->
+      <a-plane
+        rotation="-90 0 0"
+        width="10"
+        height="10"
+        color="#eee7e3"
+      ></a-plane>
 
-          <!-- Candle #2 -->
-          <a-cylinder
-            position="0 0.9 0"
-            radius="0.05"
-            height="0.3"
-            color="#FFFFFF"
-          ></a-cylinder>
-          <a-sphere
-            position="0 1.05 0"
-            radius="0.05"
-            color="#FFD700"
-          ></a-sphere>
+      <!-- Cake Base (Cylinder) with Frosting (Torus) -->
+      <a-cylinder
+        id="cake"
+        position="0 0.3 0"
+        radius="0.5"
+        height="0.6"
+        color="#ffc0cb"
+        class="clickable"
+      >
+        <a-torus
+          position="0 0.6 0"
+          radius="0.52"
+          radius-tubular="0.1"
+          rotation="90 0 0"
+          color="#fff0f5"
+        ></a-torus>
+      </a-cylinder>
 
-          <!-- Candle #3 -->
-          <a-cylinder
-            position="0.2 0.9 0"
-            radius="0.05"
-            height="0.3"
-            color="#FFFFFF"
-          ></a-cylinder>
-          <a-sphere
-            position="0.2 1.05 0"
-            radius="0.05"
-            color="#FFD700"
-          ></a-sphere>
+      <!-- Three Candles on Top of the Cake -->
+      <!-- Candle Left -->
+      <a-cylinder
+        position="-0.2 0.9 0"
+        radius="0.05"
+        height="0.3"
+        color="#ffffff"
+      ></a-cylinder>
+      <a-sphere
+        position="-0.2 1.05 0"
+        radius="0.05"
+        color="#ffd700"
+      ></a-sphere>
+      <!-- Candle Center -->
+      <a-cylinder
+        position="0 0.9 0"
+        radius="0.05"
+        height="0.3"
+        color="#ffffff"
+      ></a-cylinder>
+      <a-sphere
+        position="0 1.05 0"
+        radius="0.05"
+        color="#ffd700"
+      ></a-sphere>
+      <!-- Candle Right -->
+      <a-cylinder
+        position="0.2 0.9 0"
+        radius="0.05"
+        height="0.3"
+        color="#ffffff"
+      ></a-cylinder>
+      <a-sphere
+        position="0.2 1.05 0"
+        radius="0.05"
+        color="#ffd700"
+      ></a-sphere>
 
-          <!-- 3) Floating Balloons (using spheres + lines) -->
-          <!-- Balloon 1 -->
-          <a-entity
-            position="-1 0.5 0"
-            animation="property: position; to: -1 1.5 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"
-          >
-            <a-sphere radius="0.2" color="#FFD1DC"></a-sphere>
-            <a-cylinder
-              position="0 -0.3 0"
-              radius="0.005"
-              height="0.6"
-              color="#000000"
-            ></a-cylinder>
-          </a-entity>
+      <!-- Floating Balloons with Gentle Up-Down Animation -->
+      <!-- Balloon 1 -->
+      <a-entity
+        position="-1 0.5 0"
+        animation="property: position; to: -1 1.5 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"
+      >
+        <a-sphere radius="0.2" color="#ffd1dc"></a-sphere>
+        <a-cylinder position="0 -0.3 0" radius="0.005" height="0.6" color="#000"></a-cylinder>
+      </a-entity>
 
-          <!-- Balloon 2 -->
-          <a-entity
-            position="1 0.5 0"
-            animation="property: position; to: 1 1.5 0; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"
-          >
-            <a-sphere radius="0.2" color="#B0E0E6"></a-sphere>
-            <a-cylinder
-              position="0 -0.3 0"
-              radius="0.005"
-              height="0.6"
-              color="#000000"
-            ></a-cylinder>
-          </a-entity>
+      <!-- Balloon 2 -->
+      <a-entity
+        position="1 0.5 0"
+        animation="property: position; to: 1 1.5 0; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"
+      >
+        <a-sphere radius="0.2" color="#b0e0e6"></a-sphere>
+        <a-cylinder position="0 -0.3 0" radius="0.005" height="0.6" color="#000"></a-cylinder>
+      </a-entity>
 
-          <!-- Balloon 3 -->
-          <a-entity
-            position="0 0.5 -1"
-            animation="property: position; to: 0 1.5 -1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"
-          >
-            <a-sphere radius="0.2" color="#E6E6FA"></a-sphere>
-            <a-cylinder
-              position="0 -0.3 0"
-              radius="0.005"
-              height="0.6"
-              color="#000000"
-            ></a-cylinder>
-          </a-entity>
+      <!-- Balloon 3 -->
+      <a-entity
+        position="0 0.5 -1"
+        animation="property: position; to: 0 1.5 -1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"
+      >
+        <a-sphere radius="0.2" color="#e6e6fa"></a-sphere>
+        <a-cylinder position="0 -0.3 0" radius="0.005" height="0.6" color="#000"></a-cylinder>
+      </a-entity>
 
-          <!-- 4) Hidden Birthday Message Text -->
-          <a-text
-            id="birthdayMessage"
-            value="Happy Birthday, Gopika! 🎂\nWishing you all the best!"
-            position="0 1.8 0"
-            align="center"
-            color="#FF69B4"
-            width="2"
-            visible="false"
-            wrap-count="20"
-            font="https://cdn.aframe.io/fonts/mozillavr.fnt"
-          ></a-text>
-
-          <!-- 5) Confetti Particles (simple box‐based confetti) -->
-          <!-- We’ll spawn a few small cubes around the cake when tapped -->
-          <a-entity id="confettiContainer"></a-entity>
-        </a-entity>
-      </a-marker>
+      <!-- Hidden Birthday Message (Appears When Cake Is Tapped) -->
+      <a-text
+        id="birthdayMessage"
+        value="Happy Birthday! 🎂\nWishing You a Wonderful Day!"
+        position="0 2.2 0"
+        align="center"
+        color="#ff69b4"
+        width="3"
+        visible="false"
+        wrap-count="24"
+        font="https://cdn.aframe.io/fonts/mozillavr.fnt"
+      ></a-text>
     </a-scene>
 
-    <!-- Inline JavaScript for Interactivity -->
+    <!-- JavaScript for Touch Interaction -->
     <script>
-      // Convenience: get references to key entities
-      const cakeEntity = document.querySelector('#cake');
-      const messageEntity = document.querySelector('#birthdayMessage');
-      const confettiContainer = document.querySelector('#confettiContainer');
+      // When the cake is tapped, reveal the message
+      const cake = document.getElementById('cake');
+      const message = document.getElementById('birthdayMessage');
 
-      // Function to‐spawn confetti cubes
-      function spawnConfetti() {
-        // Remove any existing confetti
-        while (confettiContainer.firstChild) {
-          confettiContainer.removeChild(confettiContainer.firstChild);
-        }
-        // Create 30 small cubes around the cake area
-        for (let i = 0; i < 30; i++) {
-          const confetti = document.createElement('a-box');
-          // Random pastel color
-          const colors = ['#FFD1DC', '#B0E0E6', '#E6E6FA', '#FFFACD', '#98FB98'];
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          // Random positions around the cake
-          const x = (Math.random() - 0.5) * 1.5;
-          const y = Math.random() * 1.5 + 0.5;
-          const z = (Math.random() - 0.5) * 1.5;
-          confetti.setAttribute('color', color);
-          confetti.setAttribute('width', '0.05');
-          confetti.setAttribute('height', '0.05');
-          confetti.setAttribute('depth', '0.05');
-          confetti.setAttribute('position', `${x} ${y} ${z}`);
-          // Animate falling
-          confetti.setAttribute(
-            'animation__fall',
-            'property: position; to: ' +
-              x +
-              ' -0.5 ' +
-              z +
-              '; dur: 1500; easing: easeIn;'
-          );
-          confettiContainer.appendChild(confetti);
-        }
-      }
-
-      // Handle tap on the cake
-      cakeEntity.addEventListener('click', () => {
-        // 1) Show the hidden text message
-        messageEntity.setAttribute('visible', 'true');
-        // 2) Spawn the confetti
-        spawnConfetti();
+      cake.addEventListener('click', () => {
+        message.setAttribute('visible', 'true');
       });
     </script>
   </body>

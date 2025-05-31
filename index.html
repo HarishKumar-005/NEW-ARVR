@@ -2,11 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>3D Birthday Wish</title>
+    <title>3D Birthday World</title>
     <!-- A-Frame Library -->
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-
-    <!-- Google Font for Aesthetic Text -->
+    <!-- Google Font for Friendly Text -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
@@ -27,21 +26,35 @@
         width: 100vw;
         height: 100vh;
       }
+      /* Optional: Cursor style (tiny ring for desktop preview) */
+      a-cursor {
+        color: #ff69b4;
+        fuse: false;
+        rayOrigin: mouse;
+        scale: 0.02 0.02 0.02;
+      }
     </style>
   </head>
 
   <body>
-    <!-- A-Frame Scene (No AR, Pure 3D) -->
-    <a-scene>
-      <!-- Camera with Orbit Controls (allows touch drag/rotate and pinch/zoom) -->
+    <!-- A-Frame Scene -->
+    <a-scene background="color: #dce7f1" embedded>
+      <!-- Camera with look-controls enabled -->
+      <!-- On mobile, tilting the phone changes the view. On desktop, drag with mouse. -->
       <a-entity
         camera
-        position="0 1.5 4"
-        orbit-controls="target: 0 1 0; enablePan: false; enableZoom: true; zoomSpeed: 0.6; rotateSpeed: 0.3; maxDistance: 10; minDistance: 2"
-        look-controls="enabled: false"
+        position="0 1.6 4"
+        look-controls="pointerLockEnabled: false"
       ></a-entity>
 
-      <!-- Lighting -->
+      <!-- Optional: a cursor for desktop testing -->
+      <a-entity
+        cursor="fuse: false; rayOrigin: mouse"
+        raycaster="objects: .clickable"
+        a-cursor
+      ></a-entity>
+
+      <!-- Lights -->
       <a-entity
         light="type: ambient; color: #ffffff; intensity: 0.5"
       ></a-entity>
@@ -50,120 +63,164 @@
         position="0 5 5"
       ></a-entity>
 
-      <!-- Ground Plane -->
+      <!-- Ground -->
       <a-plane
         rotation="-90 0 0"
-        width="10"
-        height="10"
+        width="12"
+        height="12"
         color="#eee7e3"
       ></a-plane>
 
-      <!-- Cake Base (Cylinder) with Frosting (Torus) -->
-      <a-cylinder
-        id="cake"
-        position="0 0.3 0"
-        radius="0.5"
-        height="0.6"
-        color="#ffc0cb"
+      <!-- Sky Dome for gentle pastel sky -->
+      <a-sky color="#a8dcfd"></a-sky>
+
+      <!-- 🌟 3D Birthday Cake (Cylinder + Torus + Candles) -->
+      <a-entity id="cakeContainer">
+        <!-- Cake base -->
+        <a-cylinder
+          id="cake"
+          position="0 0.3 0"
+          radius="0.6"
+          height="0.6"
+          color="#ffc0cb"
+          class="clickable"
+        >
+          <!-- Frosting ring on top -->
+          <a-torus
+            position="0 0.6 0"
+            radius="0.62"
+            radius-tubular="0.12"
+            rotation="90 0 0"
+            color="#fff0f5"
+          ></a-torus>
+        </a-cylinder>
+
+        <!-- Three candles on the cake -->
+        <!-- Left candle -->
+        <a-cylinder
+          position="-0.2 0.9 0"
+          radius="0.06"
+          height="0.3"
+          color="#ffffff"
+        ></a-cylinder>
+        <a-sphere
+          position="-0.2 1.05 0"
+          radius="0.06"
+          color="#ffd700"
+        ></a-sphere>
+
+        <!-- Center candle -->
+        <a-cylinder
+          position="0 0.9 0"
+          radius="0.06"
+          height="0.3"
+          color="#ffffff"
+        ></a-cylinder>
+        <a-sphere
+          position="0 1.05 0"
+          radius="0.06"
+          color="#ffd700"
+        ></a-sphere>
+
+        <!-- Right candle -->
+        <a-cylinder
+          position="0.2 0.9 0"
+          radius="0.06"
+          height="0.3"
+          color="#ffffff"
+        ></a-cylinder>
+        <a-sphere
+          position="0.2 1.05 0"
+          radius="0.06"
+          color="#ffd700"
+        ></a-sphere>
+      </a-entity>
+
+      <!-- 🎈 Three Floating Balloons -->
+      <!-- Balloon 1 (left, pink) -->
+      <a-entity
+        id="balloon1"
         class="clickable"
+        position="-1.2 0.6 0"
+        animation="property: position; to: -1.2 1.6 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"
       >
-        <a-torus
-          position="0 0.6 0"
-          radius="0.52"
-          radius-tubular="0.1"
-          rotation="90 0 0"
-          color="#fff0f5"
-        ></a-torus>
-      </a-cylinder>
-
-      <!-- Three Candles on Top of the Cake -->
-      <!-- Candle Left -->
-      <a-cylinder
-        position="-0.2 0.9 0"
-        radius="0.05"
-        height="0.3"
-        color="#ffffff"
-      ></a-cylinder>
-      <a-sphere
-        position="-0.2 1.05 0"
-        radius="0.05"
-        color="#ffd700"
-      ></a-sphere>
-      <!-- Candle Center -->
-      <a-cylinder
-        position="0 0.9 0"
-        radius="0.05"
-        height="0.3"
-        color="#ffffff"
-      ></a-cylinder>
-      <a-sphere
-        position="0 1.05 0"
-        radius="0.05"
-        color="#ffd700"
-      ></a-sphere>
-      <!-- Candle Right -->
-      <a-cylinder
-        position="0.2 0.9 0"
-        radius="0.05"
-        height="0.3"
-        color="#ffffff"
-      ></a-cylinder>
-      <a-sphere
-        position="0.2 1.05 0"
-        radius="0.05"
-        color="#ffd700"
-      ></a-sphere>
-
-      <!-- Floating Balloons with Gentle Up-Down Animation -->
-      <!-- Balloon 1 -->
-      <a-entity
-        position="-1 0.5 0"
-        animation="property: position; to: -1 1.5 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"
-      >
-        <a-sphere radius="0.2" color="#ffd1dc"></a-sphere>
-        <a-cylinder position="0 -0.3 0" radius="0.005" height="0.6" color="#000"></a-cylinder>
+        <a-sphere radius="0.25" color="#ffd1dc"></a-sphere>
+        <a-cylinder
+          position="0 -0.35 0"
+          radius="0.005"
+          height="0.7"
+          color="#000"
+        ></a-cylinder>
       </a-entity>
 
-      <!-- Balloon 2 -->
+      <!-- Balloon 2 (right, light blue) -->
       <a-entity
-        position="1 0.5 0"
-        animation="property: position; to: 1 1.5 0; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"
+        id="balloon2"
+        class="clickable"
+        position="1.2 0.6 0"
+        animation="property: position; to: 1.2 1.6 0; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"
       >
-        <a-sphere radius="0.2" color="#b0e0e6"></a-sphere>
-        <a-cylinder position="0 -0.3 0" radius="0.005" height="0.6" color="#000"></a-cylinder>
+        <a-sphere radius="0.25" color="#b0e0e6"></a-sphere>
+        <a-cylinder
+          position="0 -0.35 0"
+          radius="0.005"
+          height="0.7"
+          color="#000"
+        ></a-cylinder>
       </a-entity>
 
-      <!-- Balloon 3 -->
+      <!-- Balloon 3 (back, lavender) -->
       <a-entity
-        position="0 0.5 -1"
-        animation="property: position; to: 0 1.5 -1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"
+        id="balloon3"
+        class="clickable"
+        position="0 0.6 -1.2"
+        animation="property: position; to: 0 1.6 -1.2; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"
       >
-        <a-sphere radius="0.2" color="#e6e6fa"></a-sphere>
-        <a-cylinder position="0 -0.3 0" radius="0.005" height="0.6" color="#000"></a-cylinder>
+        <a-sphere radius="0.25" color="#e6e6fa"></a-sphere>
+        <a-cylinder
+          position="0 -0.35 0"
+          radius="0.005"
+          height="0.7"
+          color="#000"
+        ></a-cylinder>
       </a-entity>
 
-      <!-- Hidden Birthday Message (Appears When Cake Is Tapped) -->
+      <!-- 🎉 Hidden Birthday Message (Appears on Cake Tap) -->
       <a-text
         id="birthdayMessage"
         value="Happy Birthday! 🎂\nWishing You a Wonderful Day!"
-        position="0 2.2 0"
+        position="0 2.3 0"
         align="center"
         color="#ff69b4"
-        width="3"
+        width="3.5"
         visible="false"
         wrap-count="24"
         font="https://cdn.aframe.io/fonts/mozillavr.fnt"
       ></a-text>
     </a-scene>
 
-    <!-- JavaScript for Touch Interaction -->
+    <!-- Inline Script for Touch / Click Interactions -->
     <script>
-      // When the cake is tapped, reveal the message
+      // Get references to clickable elements
       const cake = document.getElementById('cake');
       const message = document.getElementById('birthdayMessage');
+      const balloons = [
+        document.getElementById('balloon1'),
+        document.getElementById('balloon2'),
+        document.getElementById('balloon3')
+      ];
 
+      // When you tap/click the cake → show the birthday message
       cake.addEventListener('click', () => {
         message.setAttribute('visible', 'true');
+      });
+
+      // When you tap/click a balloon → hide (pop) that balloon
+      balloons.forEach((balloon) => {
+        balloon.addEventListener('click', () => {
+          // Fade out or simply set visible to false
+          balloon.setAttribute('visible', 'false');
+        });
       });
     </script>
   </body>
